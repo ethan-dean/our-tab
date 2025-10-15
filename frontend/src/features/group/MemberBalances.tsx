@@ -12,7 +12,7 @@ interface MemberBalancesProps {
 const fetchGroupBalances = async (groupId: string) => {
   const { data, error } = await supabase
     .from('group_balances')
-    .select('net_balance, profiles(*)')
+    .select('net_balance, profiles!group_members_user_id_fkey(*)')
     .eq('group_id', groupId);
 
   if (error) {
