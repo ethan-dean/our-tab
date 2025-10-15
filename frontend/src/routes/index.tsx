@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import RootLayout from '../pages/RootLayout';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
@@ -8,6 +8,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from './ProtectedRoute';
 
 import GroupPage from '../pages/GroupPage';
+import PostDetailPage from '../pages/PostDetailPage';
 
 import ProfilePage from '../pages/ProfilePage';
 

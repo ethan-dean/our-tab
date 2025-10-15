@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState, PropsWithChildren } from 'react';
-import { Session, User } from '@supabase/supabase-js';
+import { createContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { type Session, type User } from '@supabase/supabase-js';
 import { supabase } from '../../lib/supabaseClient';
 
 interface AuthContextType {

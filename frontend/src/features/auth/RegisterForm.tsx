@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { signUpNewUser } from '../../lib/api';
 
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+
 import styles from './Form.module.css';
 
 const RegisterForm: React.FC = () => {

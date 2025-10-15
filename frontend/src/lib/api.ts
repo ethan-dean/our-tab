@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient';
-import { SignInWithPasswordCredentials, SignUpWithPasswordCredentials } from '@supabase/supabase-js';
-import { Profile } from '../types/database';
+import { type SignInWithPasswordCredentials, type SignUpWithPasswordCredentials } from '@supabase/supabase-js';
+import { type Profile } from '../types/database';
 
 // --- Auth API ---
 
