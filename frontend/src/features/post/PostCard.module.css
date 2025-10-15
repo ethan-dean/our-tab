@@ -1,0 +1,54 @@
+.card {
+  background-color: #2d2d2d;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 5px solid #646cff;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.card:hover {
+  background-color: #3c3c3c;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.cardAmount {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.cardBody {
+  color: #aaa;
+}
+
+.userShare {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.positive {
+  color: #28a745;
+}
+
+.negative {
+  color: #dc3545;
+}
+
+.pendingActions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}

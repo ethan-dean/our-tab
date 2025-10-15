@@ -1,0 +1,40 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.splitSection {
+  margin-top: 1rem;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+}
+
+.memberSplitRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.splitInput {
+  width: 80px;
+}
+
+.validationError {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.totalRow {
+  font-weight: bold;
+  border-top: 1px solid #444;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}

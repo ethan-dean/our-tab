@@ -1,0 +1,25 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .gridContainer {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainContent {
+  grid-column: 1;
+}
+
+.sidebar {
+  grid-column: 1;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    grid-column: 2;
+  }
+}

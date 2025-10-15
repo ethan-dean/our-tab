@@ -1,0 +1,13 @@
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  border-top: 1px solid #444;
+}
+
+.historyItem {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #444;
+  font-size: 0.9em;
+  color: #aaa;
+}
