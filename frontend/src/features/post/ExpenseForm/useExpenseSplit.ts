@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useMemo } from 'react';
-import { Profile } from '../../../types/database';
+import { type Profile } from '../../../types/database';
 
 // --- State and Action Types ---
 

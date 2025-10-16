@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost, editPost } from '../../../lib/api';
 import { useExpenseSplit } from './useExpenseSplit';
 import { useAuth } from '../../../hooks/useAuth';
-import { Profile } from '../../../types/database';
+import { type Profile } from '../../../types/database';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import styles from './ExpenseForm.module.css';

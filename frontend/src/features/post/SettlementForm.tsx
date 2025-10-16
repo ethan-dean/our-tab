@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createSettlement } from '../../lib/api';
 import { useAuth } from '../../hooks/useAuth';
-import { Profile } from '../../types/database';
+import { type Profile } from '../../types/database';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 
