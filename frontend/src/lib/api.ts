@@ -95,9 +95,11 @@ export const createGroup = async (name: string) => {
 };
 
 export const createInvite = async (groupId: string, inviteeEmail: string) => {
-    const { data, error } = await supabase.rpc('invite_user', { 
-        p_group_id: groupId, 
-        p_invitee_email: inviteeEmail 
+    const { data, error } = await supabase.functions.invoke('invite-with-group', {
+        body: { 
+            groupId: groupId,
+            invitee_email: inviteeEmail 
+        },
     });
     if (error) throw error;
     return data;
@@ -284,8 +286,8 @@ export const simplifyDebts = async (groupId: string) => {
     if (balanceError) throw balanceError;
 
     // 2. Implement the greedy algorithm
-    const debtors = balances.filter(b => b.net_balance < 0).sort((a, b) => a.net_balance - b.net_balance);
-    const creditors = balances.filter(b => b.net_balance > 0).sort((a, b) => b.net_balance - a.net_balance);
+    const debtors = balances.filter((b: any) => b.net_balance < 0).sort((a: any, b: any) => a.net_balance - b.net_balance);
+    const creditors = balances.filter((b: any) => b.net_balance > 0).sort((a: any, b: any) => b.net_balance - a.net_balance);
     
     const simplifiedPayments: any[] = [];
     const settlementPosts: any[] = [];
@@ -296,13 +298,11 @@ export const simplifyDebts = async (groupId: string) => {
         const paymentAmount = Math.min(Math.abs(debtor.net_balance), creditor.net_balance);
 
         if (paymentAmount < 0.01) {
-            // Avoid creating tiny settlements due to floating point issues
             debtors.shift();
             creditors.shift();
             continue;
         }
 
-        // Prepare settlement post for batch insertion
         settlementPosts.push({
             group_id: groupId,
             author_id: user.id,
@@ -317,7 +317,6 @@ export const simplifyDebts = async (groupId: string) => {
             from_user: `${debtor.profiles.first_name} ${debtor.profiles.last_name}`,
             to_user: `${creditor.profiles.first_name} ${creditor.profiles.last_name}`,
             amount: paymentAmount,
-            // Store IDs for creating splits later
             payer_id: debtor.profiles.id,
             recipient_id: creditor.profiles.id,
         });
@@ -369,4 +368,22 @@ export const simplifyDebts = async (groupId: string) => {
     if (summaryError) throw summaryError;
 
     return summaryPost;
+};
+
+export const add_user_to_group = async (groupId: string) => {
+    const { data, error } = await supabase.rpc('add_user_to_group', { p_group_id: groupId });
+    if (error) throw error;
+    return data;
+};
+
+// --- Notification API ---
+
+export const getNotifications = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
 };

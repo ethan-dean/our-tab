@@ -14,8 +14,9 @@ const InviteForm: React.FC<InviteFormProps> = ({ groupId, onSuccess }) => {
 
   const mutation = useMutation({
     mutationFn: (inviteeEmail: string) => createInvite(groupId, inviteeEmail),
-    onSuccess: () => {
-      alert(`Invite sent to ${email}!`);
+    onSuccess: (data: any) => {
+      const responseMessage = data?.message || 'Invite processed successfully!';
+      alert(responseMessage);
       onSuccess();
     },
   });

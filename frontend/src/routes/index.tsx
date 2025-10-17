@@ -12,6 +12,10 @@ import PostDetailPage from '../pages/PostDetailPage';
 
 import ProfilePage from '../pages/ProfilePage';
 
+import NotificationsPage from '../pages/NotificationsPage';
+
+import AcceptInvitePage from '../pages/AcceptInvitePage';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -28,6 +32,8 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: 'dashboard', element: <DashboardPage /> },
+          { path: 'accept-invite', element: <AcceptInvitePage /> },
+          { path: 'notifications', element: <NotificationsPage /> },
           {
             path: 'group/:groupId',
             element: <Outlet />,

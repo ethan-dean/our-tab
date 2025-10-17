@@ -18,6 +18,7 @@ const Navbar: React.FC = () => {
       <div className={styles.navLinks}>
         <Link to="/">Home</Link>
         {user && <Link to="/dashboard">Dashboard</Link>}
+        {user && <Link to="/notifications">Notifications</Link>}
       </div>
       <div className={styles.authActions}>
         {!loading && (
