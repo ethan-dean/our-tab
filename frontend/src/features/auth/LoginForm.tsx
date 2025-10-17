@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithPassword } from '../../lib/api';
 
 import Button from '../../components/ui/Button';
@@ -7,7 +7,11 @@ import Input from '../../components/ui/Input'
 
 import styles from './Form.module.css';
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  inviteError?: string | null;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ inviteError }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +35,7 @@ const LoginForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
       <h2>Login</h2>
+      {inviteError && <p style={{ color: 'orange', border: '1px solid orange', padding: '1rem', borderRadius: '8px', whiteSpace: 'pre-wrap' }}>{inviteError}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className={styles.formField}>
         <label htmlFor="email">Email</label>
@@ -55,6 +60,9 @@ const LoginForm: React.FC = () => {
       <Button type="submit" disabled={loading}>
         {loading ? 'Signing In...' : 'Sign In'}
       </Button>
+      <div className={styles.formLink}>
+        <Link to="/forgot-password">Forgot your password?</Link>
+      </div>
     </form>
   );
 };

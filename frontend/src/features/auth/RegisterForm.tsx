@@ -29,6 +29,7 @@ const RegisterForm: React.FC = () => {
             first_name: firstName,
             last_name: lastName,
           },
+          emailRedirectTo: window.location.origin + '/dashboard',
         },
       });
       setMessage('Success! Please check your email for a verification link.');

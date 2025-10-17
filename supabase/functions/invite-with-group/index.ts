@@ -22,57 +22,57 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // 1. Check if user exists by calling the new RPC function.
-    const { data: existingUserId, error: rpcError } = await supabaseAdmin
+    // 1. Check if user exists by calling the RPC function.
+    let { data: userId, error: rpcError } = await supabaseAdmin
       .rpc('get_user_id_by_email', { p_email: invitee_email })
       .single();
 
-    // rpcError with code PGRST116 means no rows were found, which is expected for a new user.
-    if (rpcError && rpcError.code !== 'PGRST116') {
+    if (rpcError && rpcError.code !== 'PGRST116') { // PGRST116 means no rows found, which is expected for a new user.
       throw rpcError;
     }
 
-    if (existingUserId) {
-      // --- EXISTING USER FLOW: Create an in-app notification ---
-      const supabaseClient = createClient(
-        Deno.env.get('SUPABASE_URL') ?? '',
-        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-        { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
-      );
-      const { data: { user: inviter } } = await supabaseClient.auth.getUser();
-      if (!inviter) throw new Error("Could not identify the user sending the invite.");
+    let responseMessage = '';
 
-      const { error: notificationError } = await supabaseAdmin
-        .from('notifications')
-        .insert({
-          user_id: existingUserId,
-          triggering_user_id: inviter.id,
-          group_id: groupId,
-          type: 'group_invite',
-        });
-
-      if (notificationError) throw notificationError;
-
-      return new Response(JSON.stringify({ message: "User already exists. In-app notification sent." }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      });
-
+    if (userId) {
+      // --- EXISTING USER FLOW ---
+      responseMessage = "User already exists. In-app notification sent.";
     } else {
-      // --- NEW USER FLOW: Send an invitation email ---
+      // --- NEW USER FLOW ---
       const redirectTo = `${Deno.env.get('SITE_URL')}/accept-invite?group_id=${groupId}`;
-      const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+      const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
         invitee_email,
         { redirectTo: redirectTo }
       );
 
       if (inviteError) throw inviteError;
-
-      return new Response(JSON.stringify({ message: "Invitation email sent to new user." }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      });
+      userId = inviteData.user.id; // Get the ID of the newly created user.
+      responseMessage = "Invitation email sent to new user.";
     }
+
+    // --- COMMON LOGIC: Create Notification for BOTH flows ---
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    );
+    const { data: { user: inviter } } = await supabaseClient.auth.getUser();
+    if (!inviter) throw new Error("Could not identify the user sending the invite.");
+
+    const { error: notificationError } = await supabaseAdmin
+      .from('notifications')
+      .insert({
+        user_id: userId,
+        triggering_user_id: inviter.id,
+        group_id: groupId,
+        type: 'group_invite',
+      });
+
+    if (notificationError) throw notificationError;
+
+    return new Response(JSON.stringify({ message: responseMessage }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    });
 
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {

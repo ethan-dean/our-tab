@@ -16,6 +16,9 @@ import NotificationsPage from '../pages/NotificationsPage';
 
 import AcceptInvitePage from '../pages/AcceptInvitePage';
 
+import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -26,6 +29,8 @@ export const router = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+      { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'update-password', element: <ResetPasswordPage /> },
 
       // Protected routes
       {
