@@ -26,8 +26,8 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
   }
 
   const mutation = useMutation({
-    mutationFn: (settlementData: { p_group_id: string; p_recipient_id: string; p_amount: number }) => 
-      createSettlement(settlementData),
+    mutationFn: ({ groupId, recipientId, amount }: { groupId: string; recipientId: string; amount: number }) => 
+      createSettlement(groupId, recipientId, amount),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', group.id] });
       queryClient.invalidateQueries({ queryKey: ['balances', group.id] });
@@ -38,7 +38,7 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (amount > 0 && recipientId) {
-      mutation.mutate({ p_group_id: group.id, p_recipient_id: recipientId, p_amount: amount });
+      mutation.mutate({ groupId: group.id, recipientId: recipientId, amount: amount });
     }
   };
 

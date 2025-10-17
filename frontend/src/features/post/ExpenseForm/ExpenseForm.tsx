@@ -19,6 +19,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
   const queryClient = useQueryClient();
 
   const [title, setTitle] = useState(postToEdit?.title || '');
+  const [description, setDescription] = useState(postToEdit?.description || '');
+  const [date, setDate] = useState(postToEdit?.date || new Date().toISOString().split('T')[0]);
   const [totalAmount, setTotalAmount] = useState(postToEdit?.total_amount || 0);
   const [payerId, setPayerId] = useState(postToEdit?.payer_id || user?.id || '');
 
@@ -31,10 +33,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
   }, [totalAmount, dispatch]);
 
   const mutation = useMutation({
-    mutationFn: (postData: any) => 
-      postToEdit 
-        ? editPost({ ...postData, p_post_id: postToEdit.id })
-        : createPost(postData),
+    mutationFn: (data: { isEdit: boolean; payload: any }) => 
+      data.isEdit 
+        ? editPost(data.payload)
+        : createPost(data.payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', group.id] });
       queryClient.invalidateQueries({ queryKey: ['balances', group.id] });
@@ -48,23 +50,30 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
 
     const splits = memberSplits.map(ms => ({ ower_id: ms.profile.id, amount: ms.calculatedAmount }));
     
-    const postData = {
-        p_group_id: group.id,
-        p_title: title,
-        p_total_amount: totalAmount,
-        p_payer_id: payerId,
-        p_image_url: null, // Image upload not implemented yet
-        p_splits: splits,
+    const payload = {
+        group_id: group.id,
+        title: title,
+        description: description,
+        date: date,
+        total_amount: totalAmount,
+        payer_id: payerId,
+        image_url: null, // Image upload not implemented yet
+        splits: splits,
     };
 
-    mutation.mutate(postData);
+    if (postToEdit) {
+        mutation.mutate({ isEdit: true, payload: { ...payload, postId: postToEdit.id } });
+    } else {
+        mutation.mutate({ isEdit: false, payload: payload });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <h3>{postToEdit ? 'Edit Expense' : 'Add New Expense'}</h3>
       <Input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required />
-      <Input type="number" placeholder="Total Amount" value={totalAmount} onChange={e => setTotalAmount(parseFloat(e.target.value) || 0)} required />
+      <Input placeholder="Description (Optional)" value={description} onChange={e => setDescription(e.target.value)} />
+      <Input type="date" value={date} onChange={e => setDate(e.target.value)} required />
       
       <div>
         <label>Paid by:</label>
@@ -97,7 +106,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
         {!isSplitValid && <p className={styles.validationError}>Splits do not add up to the total amount!</p>}
       </div>
 
-      <Button type="submit" disabled={!isSplitValid || mutation.isPending}>
+      <Button type="submit" disabled={!isSplitValid || mutation.isPending || postToEdit}>
         {mutation.isPending ? 'Saving...' : 'Save Expense'}
       </Button>
       {mutation.isError && <p className={styles.validationError}>{mutation.error.message}</p>}

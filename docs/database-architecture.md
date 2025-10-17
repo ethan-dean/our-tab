@@ -57,7 +57,7 @@ A junction table linking users to groups, defining their role and status.
 
 ### `profiles` Table
 
-Stores public-facing user data, linked one-to-one with `auth.users`.
+Stores public-facing user data, linked one-to-one with `auth.users`. A profile record is created automatically by a database trigger whenever a new user signs up.
 
 | Column | Type | Notes |
 | :--- | :--- | :--- |
