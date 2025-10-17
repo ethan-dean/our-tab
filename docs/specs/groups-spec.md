@@ -92,15 +92,19 @@ This critical workflow ensures a group is never left without an admin.
 
 ### 3.4 Member Invitations (FR 3.2.2)
 
-This flow outlines how a user joins a group via an invitation.
+This flow outlines how a user is invited to a group and how they join.
 
-*   **Mechanism:** An existing group member creates an invitation, which generates a unique URL containing the `group_id`. This URL can be shared via email, text, or other methods.
+*   **Mechanism:** An existing group member initiates an invitation by providing an email address. This action calls a dedicated **Supabase Database Function (RPC)** named `invite_user`, which leverages Supabase's admin privileges.
 *   **Flow:**
-    1.  The invited person clicks the invitation link and is directed to a specific page within the web app.
-    2.  The application checks if the user has a valid session (is logged in).
-    3.  **If Logged In:** The user is presented with "Accept" or "Decline" options for the invitation. The client calls the `accept_invite` or `decline_invite` RPC.
-    4.  **If Not Logged In:** The user is shown the group name and prompted to either **Log In** or **Register**. After successfully logging in or creating an account, they are automatically added to the group as if they had clicked "Accept".
-*   **Pending Invites:** For a logged-in user, any pending invitations sent to their email address will be displayed on their main notifications page.
+    1.  An active member of a group submits an email address through the "Invite Member" form in the UI.
+    2.  The client calls the `invite_user` RPC, passing the `group_id` and `invitee_email`.
+    3.  The `invite_user` function, running with elevated privileges on the backend, performs several actions:
+        a. It calls `supabase.auth.admin.inviteUserByEmail()`, which generates and sends an official Supabase invitation email to the `invitee_email`.
+        b. It inserts a new row into the `public.invites` table to track the pending invitation.
+        c. It checks if a user exists with the provided email. If so, it also inserts a new row into the `public.notifications` table with a type of `'group_invite'` for the existing user.
+    4.  The invited person clicks the link in the email.
+    5.  Supabase handles the token exchange. If the user is new, they will be prompted to create a password to complete their account. If they are an existing user, they will be logged in.
+    6.  The frontend, upon detecting a logged-in user, will check for any `'pending'` invites associated with their email and automatically call the `accept_invite` RPC to add them to the group.
 
 ---
 
@@ -119,16 +123,9 @@ The use of database functions is central to this design. It moves transactional 
 
 ## 5.0 Authorization (Supabase RLS)
 
-Row Level Security (RLS) policies are essential to ensure users can only see and modify data they are permitted to access.
+For the initial MVP and internal testing phase, Row Level Security (RLS) policies will be simplified to accelerate development.
 
-* **On `groups` table:**
-    * **`SELECT`:** Users can only see groups they are a member of. The policy will check for the existence of a corresponding row in `group_members` where `user_id = auth.uid()`.
-
-* **On `group_members` table:**
-    * **`SELECT`:** Users can only see membership records for groups they belong to.
-    * **`UPDATE`:** A user's ability to update a record depends on their role. The RLS policy will be more complex:
-        * A user can update their **own** record if they are changing their status to `'inactive'` (leaving the group).
-        * A user with the `'admin'` role can update **any** record within that group (e.g., to remove another member or promote them).
-
-* **On `expenses` table (related):**
-    * **`INSERT` / `UPDATE`:** Any action on expenses will first check if the requesting user is an `'active'` member of that group via a join to the `group_members` table. This policy enforces the "frozen" state at the database level. 🔒
+* **General Policy:** All policies on the `groups` and `group_members` tables will be relaxed. Instead of enforcing granular, role-based permissions, the policies will primarily check if a user is authenticated.
+* **Implementation:**
+    * **`SELECT` / `INSERT` / `UPDATE`:** The RLS policy for all operations on group-related tables will be a simple check for `auth.role() = 'authenticated'`. This allows any logged-in user to see, create, and modify any group or membership record.
+* **Future State:** This simplified security model is temporary. Before production, these policies will be replaced with strict rules that ensure users can only access their own groups and that only admins can perform sensitive actions. 🔒

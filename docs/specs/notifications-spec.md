@@ -65,3 +65,12 @@ The client-side React application will be responsible for fetching and displayin
 * **Marking as Read:**
     * **Mechanism:** A **Supabase Database Function (RPC)**, such as `mark_notifications_as_read`, will be created.
     * **Flow:** When a user visits the `/notifications` page, a `useEffect` hook will call this RPC. The function will then update all of the user's unread notifications by setting `is_read` to `true`. This ensures the unread count is updated efficiently in a single, secure backend call.
+
+---
+
+## 5.0 Authorization (Supabase RLS)
+
+For the MVP and internal testing, RLS policies on the `notifications` table will be simplified.
+
+*   **Policy:** The policies for `SELECT`, `UPDATE`, and `DELETE` will only check that a user is authenticated (`auth.role() = 'authenticated'`).
+*   **Implication:** This means any authenticated user can read, update (e.g., mark as read), or delete any notification in the system. This will be replaced with a strict policy where users can only access their own notifications before production.

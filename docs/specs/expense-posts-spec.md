@@ -32,10 +32,13 @@ This table serves as the primary record for any expense or settlement post.
 | **`author_id`** | `UUID` | **Foreign Key** to `profiles.id`. User who created the post. |
 | **`type`** | `post_type` | **ENUM Type** with values: `'expense'`, `'settlement'`. |
 | **`title`** | `TEXT` | The name of the expense or settlement. |
+| **`description`** | `TEXT` | Nullable. A longer description for the post. |
+| **`date`** | `DATE` | The date of the expense. Defaults to current date. |
 | **`total_amount`** | `NUMERIC(10, 2)` | Nullable. If `NULL`, the post is "Pending" (FR 3.3.4). |
 | **`payer_id`** | `UUID` | **Foreign Key** to `profiles.id`. Who paid for the expense or sent the settlement. |
 | **`image_url`** | `TEXT` | Nullable. A URL pointing to an image in Supabase Storage. |
 | **`status`** | `post_status` | **ENUM Type** with values: `'active'`, `'pending_amount'`, `'pending_confirmation'`, `'invalid'`. |
+| **`metadata`** | `JSONB` | Nullable. Used for extra data like in debt simplification. |
 | **`created_at`** | `TIMESTAMPTZ` | Automatically set on creation. |
 
 ### 2.2 `post_splits` Table
@@ -72,7 +75,7 @@ Due to the need to write to multiple tables simultaneously (`posts`, `post_split
 * **Mechanism:** Two RPCs: `create_post` and `edit_post`.
 * **Flow:**
     1.  The React client calculates the debt distribution based on the user-selected split logic (equal, exact, or hybrid) (FR 3.4).
-    2.  The client constructs a JSON payload containing all post details and an array of `split` objects (each with a `user_id` and `amount`).
+    2.  The client constructs a JSON payload containing all post details (including the new `description` and `date` fields) and an array of `split` objects (each with a `user_id` and `amount`).
     3.  The client calls the appropriate RPC function with this payload.
     4.  The RPC function executes a single transaction to:
         a.  Insert or update the row in the `posts` table.
@@ -114,7 +117,5 @@ Calculating the net balance for every user in real-time is inefficient. This wil
 
 ## 5.0 Authorization (Supabase RLS)
 
-Row Level Security policies will secure all post-related data.
-
-*   **Primary Rule:** The fundamental check for all policies (`SELECT`, `INSERT`, `UPDATE`) on post-related tables is to verify that the *requesting user* (`auth.uid()`) is an **`'active'`** member of the group associated with the data.
-*   **Implementation:** The RLS policy will check for a record in the `group_members` table where `user_id = auth.uid()` and `status = 'active'`. This ensures the user making the change has permission. This policy **does not** restrict the `ower_id` in a `post_split` to only active members. This allows an active member to edit a past expense and correctly include a member who has since become inactive ("frozen"), fulfilling requirement FR 3.2.6.
+*   **MVP Security Policy:** For the initial MVP and internal testing, RLS policies on post-related tables will be relaxed. Instead of checking for group membership, the policies for `SELECT`, `INSERT`, and `UPDATE` operations will simply verify that the user is authenticated.
+*   **Implementation:** The RLS policy will be a simple check for `auth.role() = 'authenticated'`. This allows any logged-in user to create, read, and edit any post, which is suitable for the current development phase. This approach will be replaced with stricter, group-based permissions before production.

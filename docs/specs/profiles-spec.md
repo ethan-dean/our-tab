@@ -81,11 +81,11 @@ The user profile page will contain a form allowing the user to modify their info
 
 ### 4.2 Authorization & Security (Supabase RLS)
 
-**Row Level Security (RLS)** is critical for ensuring users can only access and modify their own profile. The following policies will be enabled on the `profiles` table:
+**Row Level Security (RLS)** for the `profiles` table will be relaxed for the MVP to align with the project's temporary internal testing policy.
 
-* **`SELECT` Policy:** A policy will be created that allows a user to read a row **if and only if** the `id` column of that row matches their own authenticated user ID.
-    * **RLS Expression:** `auth.uid() = id`
-* **`UPDATE` Policy:** A policy will be created that allows a user to update a row **if and only if** the `id` column matches their own authenticated user ID.
-    * **RLS Expression:** `auth.uid() = id`
+* **`SELECT` Policy:** A policy will be created that allows any authenticated user to read any profile.
+    * **RLS Expression:** `auth.role() = 'authenticated'`
+* **`UPDATE` Policy:** A policy will be created that allows any authenticated user to update any profile.
+    * **RLS Expression:** `auth.role() = 'authenticated'`
 
-These policies are the primary enforcement mechanism, guaranteeing that even a compromised or malicious client cannot access or alter another user's data. 🛡️
+This open policy allows any logged-in user to view and modify any other user's profile information. This is a significant security simplification for the MVP and will be replaced with strict policies that ensure users can only access and modify their own profile before any production release. 🛡️

@@ -44,7 +44,7 @@ This workflow ensures that payments logged by a sender are verified by the recip
 * **Flow - Recipient Confirms/Denies:**
     1.  The recipient is notified and prompted in the UI to act on the pending settlement.
     2.  The client calls an RPC, `resolve_settlement(post_id, action)`, where `action` is either `'confirm'` or `'deny'`.
-    3.  The RPC first verifies that the calling user (`auth.uid()`) is the designated recipient of the settlement post.
+    3.  The RPC will verify that the calling user is authenticated. For the MVP, it will not check if the user is the designated recipient, allowing any authenticated user to resolve the settlement.
     4.  If the action is `'confirm'`, the RPC updates the post `status` to **`'active'`**. The transaction is now final.
     5.  If the action is `'deny'`, the RPC updates the post `status` to **`'invalid'`**. This serves as a "soft delete," preserving the record of the denied payment while ensuring it is excluded from all future balance calculations. This correctly reverts the transaction.
 
@@ -56,7 +56,7 @@ This workflow ensures that payments logged by a sender are verified by the recip
 
 This feature calculates the most efficient payment paths to clear all debts within a group. This is a computationally intensive task handled by the backend.
 
-* **Mechanism:** A **Supabase Database Function (RPC)** named `simplify_group_debts` will be created. This function can only be executed by a user with an `'admin'` role in the group.
+* **Mechanism:** A **Supabase Database Function (RPC)** named `simplify_group_debts` will be created. For the MVP, this function can be executed by any authenticated user.
 * **High-Level Algorithm:**
     1.  **Fetch Balances:** The function queries the `group_balances` view to get the current net balance for every active member in the group.
     2.  **Identify Debtors & Creditors:** The function partitions the list of members into two groups: **Debtors** (negative balance) and **Creditors** (positive balance).

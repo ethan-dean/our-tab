@@ -23,7 +23,7 @@ This document outlines the functional requirements for a web application designe
 ### **3.2 Group Management**
 
 * **3.2.1 Group Creation:** Any registered user can create a new group, becoming its first Group Admin.
-* **3.2.2 Member Invitations:** Any member of a group can invite new users to join.
+* **3.2.2 Member Invitations:** Any member of a group can invite new users to join by providing their email address. The system will send an email invitation to the specified address. If the invited user already has an account, they will also receive an in-app notification.
 * **3.2.3 Removing Members:** Only a Group Admin can remove another member from the group.
 * **3.2.4 Leaving a Group:** Any user can choose to leave a group at any time.
 * **3.2.5 Admin Transfer on Departure:** If a Group Admin attempts to leave a group, they must first designate another member as the new Admin before the action can be completed.
@@ -42,6 +42,8 @@ This document outlines the functional requirements for a web application designe
 * **3.3.2 Dashboard Summary:** The main group page must display a summary for each member, showing their total amount owed (in red) or the total amount they are owed (in green).
 * **3.3.3 Expense Post Creation:** A user can create an expense post with the following attributes:
     * A name/title for the charge.
+    * An optional, longer description for the expense.
+    * The date the expense occurred (defaults to the current day).
     * The total cost.
     * The member who paid (defaults to the post creator).
     * The members who owe for the charge.

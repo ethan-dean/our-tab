@@ -73,13 +73,9 @@ export const createGroup = async (name: string) => {
 };
 
 export const createInvite = async (groupId: string, inviteeEmail: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error("User not authenticated");
-
-    const { data, error } = await supabase.from('invites').insert({
-        group_id: groupId,
-        inviter_id: user.id,
-        invitee_email: inviteeEmail,
+    const { data, error } = await supabase.rpc('invite_user', { 
+        p_group_id: groupId, 
+        p_invitee_email: inviteeEmail 
     });
     if (error) throw error;
     return data;

@@ -84,6 +84,8 @@ Once the user is satisfied with the split and submits the form, the client will 
     {
       "group_id": "...",
       "title": "Groceries",
+      "description": "Weekly grocery run",
+      "date": "2025-10-26",
       "total_amount": 125.50,
       "payer_id": "...",
       "splits": [
