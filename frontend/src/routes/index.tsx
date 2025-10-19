@@ -18,6 +18,7 @@ import AcceptInvitePage from '../pages/AcceptInvitePage';
 
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import CompleteProfilePage from '../pages/CompleteProfilePage';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          { path: 'complete-profile', element: <CompleteProfilePage /> },
           { path: 'dashboard', element: <DashboardPage /> },
           { path: 'accept-invite', element: <AcceptInvitePage /> },
           { path: 'notifications', element: <NotificationsPage /> },

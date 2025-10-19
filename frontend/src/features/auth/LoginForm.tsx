@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithPassword } from '../../lib/api';
+import { useAuth } from '../../hooks/useAuth';
 
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input'
@@ -17,6 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ inviteError }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { refreshSession } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ inviteError }) => {
     setLoading(true);
     try {
       await signInWithPassword({ email, password });
+      await refreshSession();
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message);

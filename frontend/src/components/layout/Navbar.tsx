@@ -5,11 +5,12 @@ import { signOut } from '../../lib/api';
 import styles from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, refreshSession } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut();
+    await refreshSession();
     navigate('/login');
   };
 

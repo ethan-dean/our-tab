@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateUserPassword } from '../../lib/api';
 import { supabase } from '../../lib/supabaseClient';
@@ -12,14 +12,21 @@ const ResetPasswordForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isSessionReady, setIsSessionReady] = useState(false);
   const navigate = useNavigate();
+  const isPasswordRecovery = useRef(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
-        // The user is in the password recovery flow
-      } else if (session) {
-        // if there is a normal session, the user should not be on this page
+        // This event is fired when the user clicks the password recovery link.
+        // We mark that we are in this flow to prevent being redirected.
+        isPasswordRecovery.current = true;
+        // The recovery session is now active. We can enable the form.
+        setIsSessionReady(true);
+      } else if (session && !isPasswordRecovery.current) {
+        // If there is a normal session and we are not in the password recovery flow,
+        // the user should not be on this page.
         navigate('/dashboard');
       }
     });
@@ -75,7 +82,7 @@ const ResetPasswordForm: React.FC = () => {
           required
         />
       </div>
-      <Button type="submit" disabled={loading || !!message}>
+      <Button type="submit" disabled={loading || !!message || !isSessionReady}>
         {loading ? 'Updating...' : 'Update Password'}
       </Button>
     </form>
