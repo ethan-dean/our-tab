@@ -11,7 +11,7 @@ const AcceptInvitePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, refreshSession } = useAuth();
 
   const [groupId, setGroupId] = useState<string | null>(null);
   const [password, setPassword] = useState('');
@@ -44,9 +44,10 @@ const AcceptInvitePage: React.FC = () => {
       // 3. Add user to the group
       await add_user_to_group(groupId);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       // Invalidate queries to refetch user-specific data
       queryClient.invalidateQueries({ queryKey: ['groups'] });
+      await refreshSession();
       // Redirect to the group page
       if (groupId) {
         navigate(`/group/${groupId}`);
