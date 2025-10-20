@@ -1,0 +1,16 @@
+import dotenv from 'dotenv';
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Provides serverPort and devServerPort
+dotenv.config()
+
+const serverPort = process.env.SERVER_PORT || 5000;
+const devServerPort = process.env.DEV_SERVER_PORT || 5173;
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// Exports for 'database.ts'.
+export {
+  serverPort,
+  devServerPort,
+};

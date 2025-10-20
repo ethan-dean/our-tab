@@ -1,0 +1,20 @@
+# Secret keys
+.env
+
+# Node
+node_modules
+
+# Compiled .ts files
+# Compiled frontend files
+dist
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
