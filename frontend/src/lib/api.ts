@@ -285,12 +285,30 @@ export const simplifyDebts = async (groupId: string) => {
     if (userError || !user) throw userError || new Error('User not found.');
 
     // 1. Fetch balances and profile data
-    const { data: balances, error: balanceError } = await supabase
+    const { data: groupBalances, error: balanceError } = await supabase
         .from('group_balances')
-        .select('net_balance, profiles!inner(id, first_name, last_name)')
+        .select('user_id, net_balance')
         .eq('group_id', groupId);
 
     if (balanceError) throw balanceError;
+    if (!groupBalances) throw new Error('Could not fetch group balances');
+
+    const userIds = groupBalances.map(b => b.user_id);
+
+    const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name')
+        .in('id', userIds);
+    
+    if (profilesError) throw profilesError;
+    if (!profiles) throw new Error('Could not fetch profiles');
+
+    const profilesById = new Map(profiles.map(p => [p.id, p]));
+
+    const balances = groupBalances.map(balance => ({
+        ...balance,
+        profiles: profilesById.get(balance.user_id)
+    }));
 
     // 2. Implement the greedy algorithm
     const debtors = balances.filter((b: any) => b.net_balance < 0).sort((a: any, b: any) => a.net_balance - b.net_balance);
@@ -313,7 +331,7 @@ export const simplifyDebts = async (groupId: string) => {
         settlementPosts.push({
             group_id: groupId,
             author_id: user.id,
-            payer_id: debtor.profiles[0].id, // Debtor pays the creditor
+            payer_id: debtor.profiles?.id, // Debtor pays the creditor
             type: 'settlement',
             title: 'Simplified Settlement',
             total_amount: paymentAmount,
@@ -321,11 +339,11 @@ export const simplifyDebts = async (groupId: string) => {
         });
 
         simplifiedPayments.push({
-            from_user: `${debtor.profiles[0].first_name} ${debtor.profiles[0].last_name}`,
-            to_user: `${creditor.profiles[0].first_name} ${creditor.profiles[0].last_name}`,
+            from_user: `${debtor.profiles?.first_name} ${debtor.profiles?.last_name}`,
+            to_user: `${creditor.profiles?.first_name} ${creditor.profiles?.last_name}`,
             amount: paymentAmount,
-            payer_id: debtor.profiles[0].id,
-            recipient_id: creditor.profiles[0].id,
+            payer_id: debtor.profiles?.id,
+            recipient_id: creditor.profiles?.id,
         });
 
         debtor.net_balance += paymentAmount;

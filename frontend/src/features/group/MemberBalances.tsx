@@ -10,15 +10,30 @@ interface MemberBalancesProps {
 }
 
 const fetchGroupBalances = async (groupId: string) => {
-  const { data, error } = await supabase
+  const { data: balances, error: balancesError } = await supabase
     .from('group_balances')
-    .select('net_balance, profiles!group_members_user_id_fkey(*)')
+    .select('user_id, net_balance')
     .eq('group_id', groupId);
 
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
+  if (balancesError) throw balancesError;
+  if (!balances) return [];
+
+  const userIds = balances.map(b => b.user_id);
+
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, first_name, last_name')
+    .in('id', userIds);
+
+  if (profilesError) throw profilesError;
+  if (!profiles) return [];
+
+  const profilesById = new Map(profiles.map(p => [p.id, p]));
+
+  return balances.map(balance => ({
+    ...balance,
+    profiles: profilesById.get(balance.user_id)
+  }));
 };
 
 const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
@@ -45,10 +60,10 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
       <h4>Member Balances</h4>
       <ul className={styles.balancesList}>
         {balances?.map(balance => (
-          <li key={balance.profiles?.[0]?.id} className={styles.balanceItem}>
+          <li key={balance.user_id} className={styles.balanceItem}>
             <div className={styles.memberInfo}>
-              <Avatar firstName={balance.profiles?.[0]?.first_name} lastName={balance.profiles?.[0]?.last_name} />
-              <span>{balance.profiles?.[0]?.first_name} {balance.profiles?.[0]?.last_name}</span>
+              <Avatar firstName={balance.profiles?.first_name} lastName={balance.profiles?.last_name} />
+              <span>{balance.profiles?.first_name} {balance.profiles?.last_name}</span>
             </div>
             <span className={`${styles.balance} ${getBalanceClass(balance.net_balance)}`}>
               {formatCurrency(balance.net_balance)}
