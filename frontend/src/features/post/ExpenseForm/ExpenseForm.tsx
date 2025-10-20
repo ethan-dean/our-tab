@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost, editPost } from '../../../lib/api';
-import { useExpenseSplit, type SplitMode } from './useExpenseSplit';
+import { useExpenseSplit } from './useExpenseSplit';
 import { useAuth } from '../../../hooks/useAuth';
 import { type Profile } from '../../../types/database';
 import Button from '../../../components/ui/Button';

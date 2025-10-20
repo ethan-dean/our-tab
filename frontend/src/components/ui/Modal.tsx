@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 

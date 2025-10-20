@@ -287,7 +287,7 @@ export const simplifyDebts = async (groupId: string) => {
     // 1. Fetch balances and profile data
     const { data: balances, error: balanceError } = await supabase
         .from('group_balances')
-        .select('net_balance, profiles!group_members_user_id_fkey(id, first_name, last_name)')
+        .select('net_balance, profiles!inner(id, first_name, last_name)')
         .eq('group_id', groupId);
 
     if (balanceError) throw balanceError;
@@ -313,7 +313,7 @@ export const simplifyDebts = async (groupId: string) => {
         settlementPosts.push({
             group_id: groupId,
             author_id: user.id,
-            payer_id: debtor.profiles.id, // Debtor pays the creditor
+            payer_id: debtor.profiles[0].id, // Debtor pays the creditor
             type: 'settlement',
             title: 'Simplified Settlement',
             total_amount: paymentAmount,
@@ -321,11 +321,11 @@ export const simplifyDebts = async (groupId: string) => {
         });
 
         simplifiedPayments.push({
-            from_user: `${debtor.profiles.first_name} ${debtor.profiles.last_name}`,
-            to_user: `${creditor.profiles.first_name} ${creditor.profiles.last_name}`,
+            from_user: `${debtor.profiles[0].first_name} ${debtor.profiles[0].last_name}`,
+            to_user: `${creditor.profiles[0].first_name} ${creditor.profiles[0].last_name}`,
             amount: paymentAmount,
-            payer_id: debtor.profiles.id,
-            recipient_id: creditor.profiles.id,
+            payer_id: debtor.profiles[0].id,
+            recipient_id: creditor.profiles[0].id,
         });
 
         debtor.net_balance += paymentAmount;
