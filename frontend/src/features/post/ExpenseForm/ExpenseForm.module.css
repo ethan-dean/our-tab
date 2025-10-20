@@ -4,10 +4,42 @@
   gap: 1rem;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #666;
+}
+
 .splitSection {
   margin-top: 1rem;
   border-top: 1px solid #444;
   padding-top: 1rem;
+}
+
+.splitHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.toggleButtons button {
+  margin-left: 0.5rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.toggleButtons .activeToggle {
+  background-color: #646cff;
+  color: white;
+  border-color: #646cff;
 }
 
 .memberSplitRow {
@@ -23,18 +55,22 @@
   gap: 0.5rem;
 }
 
+.splitControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .splitInput {
   width: 80px;
+}
+
+.contributing {
+  background-color: #28a745 !important;
+  color: white !important;
 }
 
 .validationError {
   color: #dc3545;
   font-weight: bold;
-}
-
-.totalRow {
-  font-weight: bold;
-  border-top: 1px solid #444;
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
 }
