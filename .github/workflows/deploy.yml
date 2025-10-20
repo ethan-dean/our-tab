@@ -49,7 +49,7 @@ jobs:
       env:
         SERVER_USER: root
         SERVER_HOST: ourtab.xyz
-        DEPLOY_PATH: /root/deployments/cc/
+        DEPLOY_PATH: /root/deployments/ot/
       run: |
         # Sync built project files to the server
         ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
