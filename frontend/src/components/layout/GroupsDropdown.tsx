@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown } from 'lucide-react';
 import { getUserGroups } from '../../lib/api';
@@ -15,7 +15,6 @@ const GroupsDropdown: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
   const { groupId } = useParams<{ groupId: string }>();
 
   const { data: groupMembers, isLoading } = useQuery({

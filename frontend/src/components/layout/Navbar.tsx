@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { signOut } from '../../lib/api';
 import styles from './Navbar.module.css';
 import GroupsDropdown from './GroupsDropdown';
 import { Bell, ChevronLeft, User } from 'lucide-react';
@@ -10,12 +9,6 @@ const Navbar: React.FC = () => {
   const { user, loading, refreshSession } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleSignOut = async () => {
-    await signOut();
-    await refreshSession();
-    navigate('/login');
-  };
 
   if (location.pathname === '/notifications' || location.pathname === '/profile') {
     const title = location.pathname === '/notifications' ? 'Notifications' : 'Profile';
