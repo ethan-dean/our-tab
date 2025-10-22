@@ -6,6 +6,9 @@ import { type Profile } from '../../types/database';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 
+import styles from '../auth/Form.module.css';
+import inputStyles from '../../components/ui/Input.module.css';
+
 interface SettlementFormProps {
   group: { id: string; group_members: { profiles: Profile }[] };
   onSuccess: () => void;
@@ -44,23 +47,31 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.modalForm}>
       <h3>Record a Settlement</h3>
-      <p>You paid:</p>
-      <Input 
-        type="number" 
-        placeholder="Amount" 
-        value={amount || ''} 
-        onChange={e => setAmount(parseFloat(e.target.value) || 0)} 
-        required 
-      />
-      <select value={recipientId} onChange={e => setRecipientId(e.target.value)} required>
-        {otherMembers.map(member => (
-          <option key={member.id} value={member.id}>
-            {member.first_name} {member.last_name}
-          </option>
-        ))}
-      </select>
+      
+      <div className={styles.formField}>
+        <label>You paid:</label>
+        <Input 
+          type="number" 
+          placeholder="Amount" 
+          value={amount || ''} 
+          onChange={e => setAmount(parseFloat(e.target.value) || 0)} 
+          required 
+        />
+      </div>
+
+      <div className={styles.formField}>
+        <label>To:</label>
+        <select value={recipientId} onChange={e => setRecipientId(e.target.value)} required className={inputStyles.input}>
+          {otherMembers.map(member => (
+            <option key={member.id} value={member.id}>
+              {member.first_name} {member.last_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <Button type="submit" disabled={mutation.isPending || !recipientId || amount <= 0}>
         {mutation.isPending ? 'Recording...' : 'Record Settlement'}
       </Button>
@@ -68,5 +79,6 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
     </form>
   );
 };
+
 
 export default SettlementForm;

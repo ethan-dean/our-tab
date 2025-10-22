@@ -1,4 +1,4 @@
-.formContainer {
+.pageFormContainer {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -9,8 +9,20 @@
   margin: 2rem auto;
 }
 
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* A bit more spacing for modals */
+}
+
 .formField {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.formField label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #666;
 }

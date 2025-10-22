@@ -15,8 +15,10 @@
   background: #242424;
   padding: 2rem;
   border-radius: 8px;
-  min-width: 300px;
-  max-width: 90%;
+  width: 90%;
+  max-width: 500px; /* Max width for desktop */
+  max-height: 85vh; /* Max height relative to viewport */
+  overflow-y: auto; /* Enable vertical scrolling */
   position: relative;
 }
 
