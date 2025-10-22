@@ -25,9 +25,21 @@
   margin: 0;
 }
 
+.amountContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .cardAmount {
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.cardDate {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
 }
 
 .cardBody {

@@ -14,6 +14,18 @@ interface PostCardProps {
   post: PostWithDetails;
 }
 
+const formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  // Adjust for timezone to prevent off-by-one day errors
+  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 const formatCurrency = (amount: number | null) => {
   if (amount === null || amount === undefined) return 'Pending';
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
@@ -29,6 +41,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', post.group_id] });
       queryClient.invalidateQueries({ queryKey: ['balances', post.group_id] });
+      queryClient.invalidateQueries({ queryKey: ['pairwiseBalances', post.group_id] });
     },
   });
 
@@ -83,7 +96,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <h4 className={styles.cardTitle}>{post.title || (post.type === 'settlement' ? getSettlementText() : 'Event')}</h4>
           <p className={styles.cardBody}>Paid by {post.payer.first_name} {post.payer.last_name}</p>
         </div>
-        <span className={styles.cardAmount}>{formatCurrency(post.total_amount)}</span>
+        <div className={styles.amountContainer}>
+          <span className={styles.cardAmount}>{formatCurrency(post.total_amount)}</span>
+          <small className={styles.cardDate}>{formatDate(post.date)}</small>
+        </div>
       </div>
       {post.status === 'pending_confirmation' && <span>Awaiting Confirmation</span>}
       {renderUserShare()}

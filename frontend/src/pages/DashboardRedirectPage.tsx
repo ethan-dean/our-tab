@@ -1,24 +1,32 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { getGroupDetails } from '../lib/api';
 import Spinner from '../components/ui/Spinner';
 
 const DashboardRedirectPage: React.FC = () => {
-  const { profile, loading } = useAuth();
   const navigate = useNavigate();
+  const lastVisitedGroupId = localStorage.getItem('lastVisitedGroupId');
+
+  const { isSuccess, isError, isLoading } = useQuery({
+    queryKey: ['group', lastVisitedGroupId],
+    queryFn: () => getGroupDetails(lastVisitedGroupId!),
+    enabled: !!lastVisitedGroupId, // Only run if the groupId exists
+    retry: 1, // Don't retry excessively if the group is invalid
+  });
 
   useEffect(() => {
-    // Wait until the authentication check is complete and profile is loaded
-    if (!loading) {
-      const lastVisitedGroupId = localStorage.getItem('lastVisitedGroupId');
-      if (lastVisitedGroupId) {
-        navigate(`/group/${lastVisitedGroupId}`, { replace: true });
-        return;
-      }
-
+    // If there's no stored group, or if the fetch fails, go to group management
+    if (!lastVisitedGroupId || isError) {
       navigate('/manage-groups', { replace: true });
+      return;
     }
-  }, [loading, profile, navigate]);
+
+    // If the fetch is successful, go to the group page
+    if (isSuccess) {
+      navigate(`/group/${lastVisitedGroupId}`, { replace: true });
+    }
+  }, [isSuccess, isError, lastVisitedGroupId, navigate]);
 
   // Display a loading spinner while the logic runs
   return (

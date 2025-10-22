@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [venmo, setVenmo] = useState('');
   const [zelle, setZelle] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
+  const [cashapp, setCashapp] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
       const paymentInfo = profile.payment_info as { [key: string]: string } | null;
       setVenmo(paymentInfo?.venmo || '');
       setZelle(paymentInfo?.zelle || '');
-      setWhatsapp(paymentInfo?.whatsapp || '');
+      setCashapp(paymentInfo?.cashapp || '');
     }
   }, [profile]);
 
@@ -57,7 +57,7 @@ const ProfilePage: React.FC = () => {
 
   const handleInfoSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const payment_info = { venmo, zelle, whatsapp };
+    const payment_info = { venmo, zelle, cashapp };
     updateProfileMutation.mutate({ first_name: firstName, last_name: lastName, payment_info });
   };
 
@@ -113,8 +113,8 @@ const ProfilePage: React.FC = () => {
           <Input value={zelle} onChange={(e) => setZelle(e.target.value)} placeholder="email or phone" />
         </div>
         <div className={styles.formField}>
-          <label>WhatsApp</label>
-          <Input value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="phone number" />
+          <label>Cash App</label>
+          <Input value={cashapp} onChange={(e) => setCashapp(e.target.value)} placeholder="$cashtag" />
         </div>
 
         <Button type="submit" disabled={updateProfileMutation.isPending}>

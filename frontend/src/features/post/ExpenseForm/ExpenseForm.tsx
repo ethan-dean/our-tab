@@ -52,6 +52,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', group.id] });
       queryClient.invalidateQueries({ queryKey: ['balances', group.id] });
+      queryClient.invalidateQueries({ queryKey: ['pairwiseBalances', group.id] });
       onSuccess();
     },
   });

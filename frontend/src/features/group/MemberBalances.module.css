@@ -5,10 +5,36 @@
 
 .balanceItem {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for the expanded details */
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem;
-  border-bottom: 1px solid #444;
+  padding: 0.75rem;
+  border-bottom: 1px solid #333;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.balanceItem:hover {
+  background-color: #2a2a2a;
+}
+
+.expandedDetails {
+  flex-basis: 100%;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: #2c2c2c;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+.expandedDetails p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.expandedDetails strong {
+  color: #fff;
 }
 
 .memberInfo {

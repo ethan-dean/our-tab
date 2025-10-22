@@ -31,6 +31,7 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', group.id] });
       queryClient.invalidateQueries({ queryKey: ['balances', group.id] });
+      queryClient.invalidateQueries({ queryKey: ['pairwiseBalances', group.id] });
       onSuccess();
     },
   });

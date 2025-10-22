@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../hooks/useAuth';
@@ -11,37 +11,34 @@ interface MemberBalancesProps {
   groupId: string;
 }
 
+const fetchGroupMemberDetails = async (groupId: string) => {
+  const { data, error } = await supabase
+    .from('group_member_details')
+    .select('user_id, first_name, last_name, email, payment_info')
+    .eq('group_id', groupId);
+  if (error) throw error;
+  return data;
+};
+
 const fetchGroupBalances = async (groupId: string) => {
-  const { data: balances, error: balancesError } = await supabase
+  const { data, error } = await supabase
     .from('group_balances')
     .select('user_id, net_balance')
     .eq('group_id', groupId);
-
-  if (balancesError) throw balancesError;
-  if (!balances) return [];
-
-  const userIds = balances.map(b => b.user_id);
-
-  const { data: profiles, error: profilesError } = await supabase
-    .from('profiles')
-    .select('id, first_name, last_name')
-    .in('id', userIds);
-
-  if (profilesError) throw profilesError;
-  if (!profiles) return [];
-
-  const profilesById = new Map(profiles.map(p => [p.id, p]));
-
-  return balances.map(balance => ({
-    ...balance,
-    profiles: profilesById.get(balance.user_id)
-  }));
+  if (error) throw error;
+  return data;
 };
 
 const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
   const { user } = useAuth();
+  const [expandedMemberId, setExpandedMemberId] = useState<string | null>(null);
 
-  const { data: balances, isLoading, isError, error } = useQuery({
+  const { data: memberDetails, isLoading: isLoadingDetails } = useQuery({
+    queryKey: ['groupMemberDetails', groupId],
+    queryFn: () => fetchGroupMemberDetails(groupId),
+  });
+
+  const { data: balances, isLoading: isLoadingBalances } = useQuery({
     queryKey: ['balances', groupId],
     queryFn: () => fetchGroupBalances(groupId),
   });
@@ -52,13 +49,25 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
     enabled: !!user,
   });
 
+  const combinedData = useMemo(() => {
+    if (!memberDetails || !balances) return [];
+    const balancesMap = new Map(balances.map(b => [b.user_id, b.net_balance]));
+    return memberDetails.map(member => ({
+      ...member,
+      net_balance: balancesMap.get(member.user_id) ?? 0,
+    }));
+  }, [memberDetails, balances]);
+
   const pairwiseBalanceMap = useMemo(() => {
     if (!pairwiseBalances) return new Map();
     return new Map(pairwiseBalances.map((b: any) => [b.user_id, b.balance]));
   }, [pairwiseBalances]);
 
-  if (isLoading || isLoadingPairwise) return <Spinner />;
-  if (isError) return <p style={{ color: 'red' }}>Error: {error.message}</p>;
+  const handleMemberClick = (memberId: string) => {
+    setExpandedMemberId(prevId => (prevId === memberId ? null : memberId));
+  };
+
+  if (isLoadingDetails || isLoadingBalances || isLoadingPairwise) return <Spinner />;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
@@ -85,18 +94,32 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
     <div>
       <h4>Member Balances</h4>
       <ul className={styles.balancesList}>
-        {balances?.map(balance => (
-          <li key={balance.user_id} className={styles.balanceItem}>
+        {combinedData?.map(member => (
+          <li key={member.user_id} className={styles.balanceItem} onClick={() => handleMemberClick(member.user_id)}>
             <div className={styles.memberInfo}>
-              <Avatar firstName={balance.profiles?.first_name} lastName={balance.profiles?.last_name} />
+              <Avatar firstName={member.first_name} lastName={member.last_name} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span>{balance.profiles?.first_name} {balance.profiles?.last_name}</span>
-                {balance.user_id !== user?.id && renderPairwiseBalance(balance.user_id)}
+                <span>{member.first_name} {member.last_name}</span>
+                {member.user_id !== user?.id && renderPairwiseBalance(member.user_id)}
               </div>
             </div>
-            <span className={`${styles.balance} ${getBalanceClass(balance.net_balance)}`}>
-              {formatCurrency(balance.net_balance)}
+            <span className={`${styles.balance} ${getBalanceClass(member.net_balance)}`}>
+              {formatCurrency(member.net_balance)}
             </span>
+            {expandedMemberId === member.user_id && (
+              <div className={styles.expandedDetails}>
+                <p><strong>Email:</strong> {member.email}</p>
+                {member.payment_info ? (
+                  <>
+                    {member.payment_info.venmo && <p><strong>Venmo:</strong> {member.payment_info.venmo}</p>}
+                    {member.payment_info.cashapp && <p><strong>Cash App:</strong> {member.payment_info.cashapp}</p>}
+                    {member.payment_info.zelle && <p><strong>Zelle:</strong> {member.payment_info.zelle}</p>}
+                  </>
+                ) : (
+                  <p>No payment info provided.</p>
+                )}
+              </div>
+            )}
           </li>
         ))}
       </ul>
