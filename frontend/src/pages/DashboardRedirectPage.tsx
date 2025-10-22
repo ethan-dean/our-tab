@@ -8,7 +8,7 @@ const DashboardRedirectPage: React.FC = () => {
   const navigate = useNavigate();
   const lastVisitedGroupId = localStorage.getItem('lastVisitedGroupId');
 
-  const { isSuccess, isError, isLoading } = useQuery({
+  const { isSuccess, isError } = useQuery({
     queryKey: ['group', lastVisitedGroupId],
     queryFn: () => getGroupDetails(lastVisitedGroupId!),
     enabled: !!lastVisitedGroupId, // Only run if the groupId exists
