@@ -6,7 +6,7 @@ import GroupsDropdown from './GroupsDropdown';
 import { Bell, ChevronLeft, User } from 'lucide-react';
 
 const Navbar: React.FC = () => {
-  const { user, loading, refreshSession } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
