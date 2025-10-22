@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../hooks/useAuth';
+import { getPairwiseBalances } from '../../lib/api';
 import Spinner from '../../components/ui/Spinner';
 import Avatar from '../../components/ui/Avatar';
 import styles from './MemberBalances.module.css';
@@ -37,12 +39,25 @@ const fetchGroupBalances = async (groupId: string) => {
 };
 
 const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
+  const { user } = useAuth();
+
   const { data: balances, isLoading, isError, error } = useQuery({
     queryKey: ['balances', groupId],
     queryFn: () => fetchGroupBalances(groupId),
   });
 
-  if (isLoading) return <Spinner />;
+  const { data: pairwiseBalances, isLoading: isLoadingPairwise } = useQuery({
+    queryKey: ['pairwiseBalances', groupId, user?.id],
+    queryFn: () => getPairwiseBalances(groupId),
+    enabled: !!user,
+  });
+
+  const pairwiseBalanceMap = useMemo(() => {
+    if (!pairwiseBalances) return new Map();
+    return new Map(pairwiseBalances.map((b: any) => [b.user_id, b.balance]));
+  }, [pairwiseBalances]);
+
+  if (isLoading || isLoadingPairwise) return <Spinner />;
   if (isError) return <p style={{ color: 'red' }}>Error: {error.message}</p>;
 
   const formatCurrency = (amount: number) => {
@@ -55,6 +70,17 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
     return styles.zero;
   };
 
+  const renderPairwiseBalance = (memberId: string) => {
+    const balance = pairwiseBalanceMap.get(memberId);
+    if (balance === undefined || Math.abs(balance) < 0.01) {
+      return <small style={{ color: '#888' }}>You are settled up.</small>;
+    }
+    if (balance > 0) {
+      return <small className={styles.positive}>Owes you {formatCurrency(balance)}</small>;
+    }
+    return <small className={styles.negative}>You owe {formatCurrency(Math.abs(balance))}</small>;
+  };
+
   return (
     <div>
       <h4>Member Balances</h4>
@@ -63,7 +89,10 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
           <li key={balance.user_id} className={styles.balanceItem}>
             <div className={styles.memberInfo}>
               <Avatar firstName={balance.profiles?.first_name} lastName={balance.profiles?.last_name} />
-              <span>{balance.profiles?.first_name} {balance.profiles?.last_name}</span>
+              <div>
+                <span>{balance.profiles?.first_name} {balance.profiles?.last_name}</span>
+                {balance.user_id !== user?.id && renderPairwiseBalance(balance.user_id)}
+              </div>
             </div>
             <span className={`${styles.balance} ${getBalanceClass(balance.net_balance)}`}>
               {formatCurrency(balance.net_balance)}

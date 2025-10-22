@@ -401,6 +401,19 @@ export const add_user_to_group = async (groupId: string) => {
     return data;
 };
 
+export const getPairwiseBalances = async (groupId: string) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("User not authenticated");
+
+    const { data, error } = await supabase.rpc('get_pairwise_balances_for_user', {
+        p_group_id: groupId,
+        p_user_id: user.id
+    });
+
+    if (error) throw error;
+    return data;
+};
+
 // --- Notification API ---
 
 export const getNotifications = async (userId: string) => {
