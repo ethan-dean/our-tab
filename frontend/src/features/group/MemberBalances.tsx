@@ -89,7 +89,7 @@ const MemberBalances: React.FC<MemberBalancesProps> = ({ groupId }) => {
           <li key={balance.user_id} className={styles.balanceItem}>
             <div className={styles.memberInfo}>
               <Avatar firstName={balance.profiles?.first_name} lastName={balance.profiles?.last_name} />
-              <div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span>{balance.profiles?.first_name} {balance.profiles?.last_name}</span>
                 {balance.user_id !== user?.id && renderPairwiseBalance(balance.user_id)}
               </div>

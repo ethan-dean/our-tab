@@ -3,7 +3,8 @@ import RootLayout from '../pages/RootLayout';
 import LandingPage from '../pages/LandingPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
-import DashboardPage from '../pages/DashboardPage';
+import ManageGroupsPage from '../pages/ManageGroupsPage';
+import DashboardRedirectPage from '../pages/DashboardRedirectPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -38,7 +39,8 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: 'complete-profile', element: <CompleteProfilePage /> },
-          { path: 'dashboard', element: <DashboardPage /> },
+          { path: 'dashboard', element: <DashboardRedirectPage /> },
+          { path: 'manage-groups', element: <ManageGroupsPage /> },
           { path: 'accept-invite', element: <AcceptInvitePage /> },
           { path: 'notifications', element: <NotificationsPage /> },
           {

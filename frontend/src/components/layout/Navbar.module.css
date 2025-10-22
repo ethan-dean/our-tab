@@ -7,11 +7,43 @@
   color: white;
 }
 
-.navLinks a,
-.authActions a {
+.navLinks a {
   color: white;
   text-decoration: none;
   margin: 0 1rem;
+}
+
+.authActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.authActions a {
+  color: white;
+  text-decoration: none;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
 .authActions button {

@@ -29,7 +29,7 @@ const RegisterForm: React.FC = () => {
             first_name: firstName,
             last_name: lastName,
           },
-          emailRedirectTo: window.location.origin + '/dashboard',
+          emailRedirectTo: window.location.origin + '/manage-groups',
         },
       });
       setMessage('Success! Please check your email for a verification link.');

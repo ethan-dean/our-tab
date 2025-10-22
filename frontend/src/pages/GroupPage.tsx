@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getGroupDetails } from '../lib/api';
@@ -17,6 +17,12 @@ import InviteForm from '../features/group/InviteForm';
 const GroupPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const [modalContent, setModalContent] = useState<'expense' | 'settlement' | 'invite' | null>(null);
+
+  useEffect(() => {
+    if (groupId) {
+      localStorage.setItem('lastVisitedGroupId', groupId);
+    }
+  }, [groupId]);
 
   const { data: group, isLoading, isError, error } = useQuery({
     queryKey: ['group', groupId],

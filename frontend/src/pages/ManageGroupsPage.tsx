@@ -10,7 +10,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Your Groups</h1>
+        <h1>Manage Your Groups</h1>
         <Button onClick={() => setIsModalOpen(true)}>+ Create Group</Button>
       </header>
 
