@@ -55,10 +55,6 @@
   }
 
   .modalContent {
-    padding: 2rem 2rem 2rem; /* Apply padding to the content instead */
+    padding: 2rem 2rem; /* Apply padding to the content instead */
   }
-
-  /* .closeButton { */
-  /*   top: 4rem; */
-  /* } */
 }

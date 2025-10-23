@@ -82,94 +82,96 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <>
       <h3>{postToEdit ? 'Edit Expense' : 'Add New Expense'}</h3>
-      
-      <div className={styles.field}>
-        <label>Title</label>
-        <Input value={title} onChange={e => setTitle(e.target.value)} required />
-      </div>
-
-      <div className={styles.field}>
-        <label>Amount</label>
-        <Input
-          type="number"
-          value={totalAmount}
-          onChange={e => setTotalAmount(parseFloat(e.target.value) || 0)}
-          required
-        />
-      </div>
-
-      <div className={styles.field}>
-        <label>Date</label>
-        <Input type="date" value={date} onChange={e => setDate(e.target.value)} required />
-      </div>
-
-      <div className={styles.field}>
-        <label>Description (Optional)</label>
-        <Input value={description} onChange={e => setDescription(e.target.value)} />
-      </div>
-      
-      <div className={styles.field}>
-        <label>Paid by</label>
-        <select value={payerId} onChange={e => setPayerId(e.target.value)} className={inputStyles.input}>
-          {groupMembers.map(member => (
-            <option key={member.id} value={member.id}>
-              {member.first_name} {member.last_name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className={styles.splitSection}>
-        <div className={styles.splitHeader}>
-          <h4>Split</h4>
-          <div className={styles.toggleButtons}>
-            <Button
-              type="button"
-              onClick={() => dispatch({ type: 'SET_SPLIT_MODE', payload: 'even' })}
-              className={splitMode === 'even' ? styles.activeToggle : ''}>
-              Split Evenly
-            </Button>
-            <Button
-              type="button"
-              onClick={() => dispatch({ type: 'SET_SPLIT_MODE', payload: 'custom' })}
-              className={splitMode === 'custom' ? styles.activeToggle : ''}>
-              Custom Split
-            </Button>
-          </div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        
+        <div className={styles.field}>
+          <label>Title</label>
+          <Input value={title} onChange={e => setTitle(e.target.value)} required />
         </div>
 
-        {memberSplits.map(ms => (
-          <div key={ms.profile.id} className={styles.memberSplitRow}>
-            <div className={styles.memberInfo}>{ms.profile.first_name}</div>
-            <div className={styles.splitControls}>
-              {splitMode === 'even' && (
-                <Button 
-                  type="button"
-                  onClick={() => dispatch({ type: 'TOGGLE_CONTRIBUTING', payload: { userId: ms.profile.id }})}
-                  className={ms.isContributing ? styles.contributing : ''}>
-                  {ms.isContributing ? 'Contributing' : 'Not Contributing'}
-                </Button>
-              )}
-              <Input 
-                type="number" 
-                className={styles.splitInput}
-                value={ms.calculatedAmount.toFixed(2)}
-                onChange={e => dispatch({ type: 'UPDATE_SPLIT_VALUE', payload: { userId: ms.profile.id, value: e.target.value }})}
-                disabled={splitMode === 'even'}
-              />
+        <div className={styles.field}>
+          <label>Amount</label>
+          <Input
+            type="number"
+            value={totalAmount}
+            onChange={e => setTotalAmount(parseFloat(e.target.value) || 0)}
+            required
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label>Date</label>
+          <Input type="date" value={date} onChange={e => setDate(e.target.value)} required />
+        </div>
+
+        <div className={styles.field}>
+          <label>Description (Optional)</label>
+          <Input value={description} onChange={e => setDescription(e.target.value)} />
+        </div>
+        
+        <div className={styles.field}>
+          <label>Paid by</label>
+          <select value={payerId} onChange={e => setPayerId(e.target.value)} className={inputStyles.input}>
+            {groupMembers.map(member => (
+              <option key={member.id} value={member.id}>
+                {member.first_name} {member.last_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.splitSection}>
+          <div className={styles.splitHeader}>
+            <h4>Split</h4>
+            <div className={styles.toggleButtons}>
+              <Button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_SPLIT_MODE', payload: 'even' })}
+                className={splitMode === 'even' ? styles.activeToggle : ''}>
+                Split Evenly
+              </Button>
+              <Button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_SPLIT_MODE', payload: 'custom' })}
+                className={splitMode === 'custom' ? styles.activeToggle : ''}>
+                Custom Split
+              </Button>
             </div>
           </div>
-        ))}
-        {!isSplitValid && <p className={styles.validationError}>Splits do not add up to the total amount!</p>}
-      </div>
 
-      <Button type="submit" disabled={!isSplitValid || mutation.isPending || postToEdit}>
-        {mutation.isPending ? 'Saving...' : 'Save Expense'}
-      </Button>
-      {mutation.isError && <p className={styles.validationError}>{mutation.error.message}</p>}
-    </form>
+          {memberSplits.map(ms => (
+            <div key={ms.profile.id} className={styles.memberSplitRow}>
+              <div className={styles.memberInfo}>{ms.profile.first_name}</div>
+              <div className={styles.splitControls}>
+                {splitMode === 'even' && (
+                  <Button 
+                    type="button"
+                    onClick={() => dispatch({ type: 'TOGGLE_CONTRIBUTING', payload: { userId: ms.profile.id }})}
+                    className={ms.isContributing ? styles.contributing : ''}>
+                    {ms.isContributing ? 'Contributing' : 'Not Contributing'}
+                  </Button>
+                )}
+                <Input 
+                  type="number" 
+                  className={styles.splitInput}
+                  value={ms.calculatedAmount.toFixed(2)}
+                  onChange={e => dispatch({ type: 'UPDATE_SPLIT_VALUE', payload: { userId: ms.profile.id, value: e.target.value }})}
+                  disabled={splitMode === 'even'}
+                />
+              </div>
+            </div>
+          ))}
+          {!isSplitValid && <p className={styles.validationError}>Splits do not add up to the total amount!</p>}
+        </div>
+
+        <Button type="submit" disabled={!isSplitValid || mutation.isPending || postToEdit}>
+          {mutation.isPending ? 'Saving...' : 'Save Expense'}
+        </Button>
+        {mutation.isError && <p className={styles.validationError}>{mutation.error.message}</p>}
+      </form>
+    </>
   );
 };
 
