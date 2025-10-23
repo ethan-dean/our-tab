@@ -10,6 +10,7 @@ import ExpenseForm from '../features/post/ExpenseForm/ExpenseForm';
 import SettlementForm from '../features/post/SettlementForm';
 import Modal from '../components/ui/Modal';
 import Button from '../components/ui/Button';
+import BottomNav from '../components/layout/BottomNav';
 import styles from './GroupPage.module.css';
 
 import InviteForm from '../features/group/InviteForm';
@@ -17,6 +18,7 @@ import InviteForm from '../features/group/InviteForm';
 const GroupPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const [modalContent, setModalContent] = useState<'expense' | 'settlement' | 'invite' | null>(null);
+  const [activeView, setActiveView] = useState<'balances' | 'posts'>('posts');
 
   useEffect(() => {
     if (groupId) {
@@ -47,7 +49,7 @@ const GroupPage: React.FC = () => {
       </div>
       <div className={styles.gridContainer}>
         <main className={styles.mainContent}>
-          <PostFeed groupId={groupId} />
+          {activeView === 'posts' ? <PostFeed groupId={groupId} /> : <MemberBalances groupId={groupId} />}
         </main>
         <aside className={styles.sidebar}>
           <MemberBalances groupId={groupId} />
@@ -65,6 +67,8 @@ const GroupPage: React.FC = () => {
           <InviteForm groupId={group.id} onSuccess={() => setModalContent(null)} />
         )}
       </Modal>
+
+      <BottomNav activeView={activeView} setActiveView={setActiveView} />
     </div>
   );
 };

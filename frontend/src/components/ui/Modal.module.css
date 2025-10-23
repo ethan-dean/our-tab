@@ -16,9 +16,9 @@
   padding: 2rem;
   border-radius: 8px;
   width: 90%;
-  max-width: 500px; /* Max width for desktop */
-  max-height: 85vh; /* Max height relative to viewport */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-width: 500px;
+  max-height: 85vh; /* This is the key for vertical scrolling */
+  overflow-y: auto;   /* This is the key for vertical scrolling */
   position: relative;
 }
 
@@ -28,7 +28,37 @@
   right: 10px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--font-size-lg);
   cursor: pointer;
   color: white;
+}
+
+/* Mobile full-screen styles */
+@media (max-width: 768px) {
+  .overlay {
+    position: absolute; /* Change from fixed to absolute */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #242424;
+    overflow-y: auto; /* Make the overlay scroll */
+  }
+
+  .modal {
+    width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    padding: 0; /* Remove padding from main container */
+    max-height: none;
+  }
+
+  .modalContent {
+    padding: 2rem 2rem 2rem; /* Apply padding to the content instead */
+  }
+
+  /* .closeButton { */
+  /*   top: 4rem; */
+  /* } */
 }

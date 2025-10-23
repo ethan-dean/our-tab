@@ -12,14 +12,14 @@
 }
 
 .headline {
-  font-size: 3rem;
+  font-size: var(--font-size-xxl);
   font-weight: bold;
   margin: 0;
   color: #646cff;
 }
 
 .subheadline {
-  font-size: 1.25rem;
+  font-size: var(--font-size-md);
   color: #aaa;
   margin: 1rem 0 2rem;
 }
@@ -29,7 +29,7 @@
   color: white;
   border: none;
   padding: 0.8rem 2rem;
-  font-size: 1.1rem;
+  font-size: var(--font-size-md);
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
@@ -46,7 +46,7 @@
 }
 
 .features h2 {
-  font-size: 2rem;
+  font-size: var(--font-size-xl);
   margin-bottom: 2rem;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .featureCard h3 {
-  font-size: 1.25rem;
+  font-size: var(--font-size-md);
   margin-top: 0;
   color: #646cff;
 }

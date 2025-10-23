@@ -15,11 +15,12 @@
 }
 
 .sidebar {
-  grid-column: 1;
+  display: none; /* Hidden on mobile by default */
 }
 
 @media (min-width: 768px) {
   .sidebar {
+    display: block; /* Visible on desktop */
     grid-column: 2;
   }
 }

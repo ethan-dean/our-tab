@@ -11,6 +11,14 @@
   --color-text-muted: #888;
   --color-border: #444;
 
+  /* Typography */
+  --font-size-sm: 0.8rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1.25rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 2.2rem;
+  --font-size-xxl: 3rem;
+
   color-scheme: light dark;
   color: var(--color-text);
   background-color: var(--color-background);
@@ -19,6 +27,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-sm: 0.75rem;
+    --font-size-base: 0.9rem;
+    --font-size-md: 1.1rem;
+    --font-size-lg: 1.3rem;
+    --font-size-xl: 1.8rem;
+    --font-size-xxl: 2.5rem;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -33,10 +52,21 @@
   }
 }
 
+html {
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overscroll-behavior-x: none; /* Prevent horizontal overscroll/bounce */
 }
 
 a {

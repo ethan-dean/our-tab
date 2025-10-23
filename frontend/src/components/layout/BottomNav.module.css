@@ -1,0 +1,33 @@
+.bottomNav {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
+  z-index: 1000;
+}
+
+.navButton {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #888;
+  padding: 1rem 0.5rem;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.navButton.active {
+  color: var(--color-primary);
+}
+
+/* Only display on mobile screens */
+@media (max-width: 768px) {
+  .bottomNav {
+    display: flex;
+  }
+}

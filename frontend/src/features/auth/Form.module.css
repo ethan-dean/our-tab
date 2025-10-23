@@ -23,6 +23,6 @@
 
 .formField label {
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: #666;
 }

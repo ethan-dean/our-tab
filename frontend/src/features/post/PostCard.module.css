@@ -20,7 +20,7 @@
 }
 
 .cardTitle {
-  font-size: 1.2rem;
+  font-size: var(--font-size-md);
   font-weight: bold;
   margin: 0;
 }
@@ -32,18 +32,18 @@
 }
 
 .cardAmount {
-  font-size: 1.2rem;
+  font-size: var(--font-size-md);
   font-weight: bold;
-}
-
-.cardDate {
-  color: #aaa;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
 }
 
 .cardBody {
   color: #aaa;
+}
+
+.cardDate {
+  color: #aaa;
+  font-size: var(--font-size-sm);
+  margin-top: 0.25rem;
 }
 
 .userShare {
