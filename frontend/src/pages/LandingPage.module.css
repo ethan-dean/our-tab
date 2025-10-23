@@ -1,0 +1,82 @@
+.page {
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+
+.hero {
+  padding: 4rem 1rem;
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  margin-bottom: 3rem;
+}
+
+.headline {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+  color: #646cff;
+}
+
+.subheadline {
+  font-size: 1.25rem;
+  color: #aaa;
+  margin: 1rem 0 2rem;
+}
+
+.ctaButton {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.ctaButton:hover {
+  background-color: #535bf2;
+}
+
+.features {
+  margin: 4rem 0;
+}
+
+.features h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.featureCard {
+  background-color: #242424;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: left;
+  border: 1px solid #333;
+}
+
+.featureCard h3 {
+  font-size: 1.25rem;
+  margin-top: 0;
+  color: #646cff;
+}
+
+.featureCard p {
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #333;
+}
