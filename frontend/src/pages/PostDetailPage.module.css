@@ -1,0 +1,78 @@
+.pageContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  background-color: #242424;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 1px solid #333;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  color: #646cff;
+}
+
+.metaInfo {
+  display: flex;
+  gap: 1.5rem;
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.totalAmount {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.descriptionCard, .splitsCard {
+  background-color: #242424;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid #333;
+}
+
+.descriptionCard h3, .splitsCard h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.splitList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.splitItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.splitItem:last-child {
+  border-bottom: none;
+}
+
+.splitUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.splitAmount {
+  font-weight: bold;
+  font-size: 1.1rem;
+}

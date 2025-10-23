@@ -1,0 +1,29 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: #646cff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.placeholder {
+  width: 60px; /* Match the approximate width of the back button */
+}

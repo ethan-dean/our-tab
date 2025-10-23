@@ -7,7 +7,6 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { type Profile } from '../types/database';
 import { useNavigate } from 'react-router-dom';
-
 import styles from '../features/auth/Form.module.css';
 
 const ProfilePage: React.FC = () => {
@@ -85,7 +84,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div>
-      <form onSubmit={handleInfoSubmit} className={styles.formContainer} style={{ maxWidth: '600px' }}>
+      <form onSubmit={handleInfoSubmit} className={styles.pageFormContainer} style={{ maxWidth: '600px' }}>
         <h2>Personal & Payment Information</h2>
         
         <div className={styles.formField}>
@@ -123,7 +122,7 @@ const ProfilePage: React.FC = () => {
         {updateProfileMutation.isError && <p style={{color: 'red'}}>{updateProfileMutation.error.message}</p>}
       </form>
 
-      <form onSubmit={handlePasswordSubmit} className={styles.formContainer} style={{ maxWidth: '600px' }}>
+      <form onSubmit={handlePasswordSubmit} className={styles.pageFormContainer} style={{ maxWidth: '600px' }}>
         <h2>Change Password</h2>
         <div className={styles.formField}>
           <label>New Password</label>
