@@ -4,6 +4,19 @@
   gap: 2rem;
 }
 
+.buttonContainer {
+  margin: 1rem 0;
+  display: flex;
+  gap: 0.5rem; /* smaller gap for mobile */
+  flex-wrap: wrap;
+}
+
+@media (min-width: 769px) {
+  .buttonContainer {
+    gap: 1rem;
+  }
+}
+
 @media (min-width: 768px) {
   .gridContainer {
     grid-template-columns: 2fr 1fr;

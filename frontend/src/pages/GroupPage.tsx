@@ -42,10 +42,10 @@ const GroupPage: React.FC = () => {
   return (
     <div>
       <GroupHeader group={group} />
-      <div style={{ margin: '1rem 0', display: 'flex', gap: '1rem' }}>
-        <Button onClick={() => setModalContent('expense')}>+ Add Expense</Button>
-        <Button onClick={() => setModalContent('settlement')} variant="secondary">+ Add Settlement</Button>
-        <Button onClick={() => setModalContent('invite')} variant="secondary">Invite Member</Button>
+      <div className={styles.buttonContainer}>
+        <Button size="smMd" onClick={() => setModalContent('expense')}>+ Add Expense</Button>
+        <Button size="smMd" onClick={() => setModalContent('settlement')} variant="secondary">+ Add Settlement</Button>
+        <Button size="smMd" onClick={() => setModalContent('invite')} variant="secondary">Invite Member</Button>
       </div>
       <div className={styles.gridContainer}>
         <main className={styles.mainContent}>

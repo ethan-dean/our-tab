@@ -29,3 +29,18 @@
 .secondary:hover {
   border-color: #999;
 }
+
+.sm {
+  font-size: var(--font-size-sm);
+  padding: 0.4em 0.8em;
+}
+
+.smMd {
+  font-size: var(--font-size-sm-md);
+  padding: 0.5em 1em;
+}
+
+.lg {
+  font-size: var(--font-size-lg);
+  padding: 0.8em 1.4em;
+}
