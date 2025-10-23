@@ -6,6 +6,7 @@ const LandingPage: React.FC = () => {
   return (
     <div className={styles.page}>
       <header className={styles.hero}>
+        <img src="/our-tab.png" alt="OurTab Logo" className={styles.logo} />
         <h1 className={styles.headline}>Stop Chasing Receipts.</h1>
         <p className={styles.subheadline}>OurTab is the simplest way for groups and friends to track shared expenses and settle up with confidence. No more spreadsheets, no more awkward reminders.</p>
         <Link to="/register" className={styles.ctaButton}>Get Started for Free</Link>

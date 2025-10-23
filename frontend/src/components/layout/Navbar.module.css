@@ -7,6 +7,16 @@
   color: white;
 }
 
+.logo {
+  height: var(--font-size-xxl);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .navLinks a {
   color: white;
   text-decoration: none;

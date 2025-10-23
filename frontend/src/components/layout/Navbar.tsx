@@ -30,6 +30,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLinks}>
+        <img src="/our-tab.png" className={styles.logo}/>
         {!user && <Link to="/">Home</Link>}
         {user && <GroupsDropdown />}
       </div>
