@@ -152,8 +152,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
                   <Button 
                     type="button"
                     onClick={() => dispatch({ type: 'TOGGLE_CONTRIBUTING', payload: { userId: ms.profile.id }})}
-                    className={ms.isContributing ? styles.contributing : ''}>
-                    {ms.isContributing ? 'Contributing' : 'Not Contributing'}
+                    className={`${styles.toggleContributeBtn} ${ms.isContributing ? styles.contributingBtn : styles.notContributingBtn}`}>
+                    {ms.isContributing ? '+' : '-'}
                   </Button>
                 )}
                 <Input 

@@ -45,8 +45,8 @@
 
 .memberSplitRow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -54,6 +54,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 156px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
 }
 
 .splitControls {
@@ -63,12 +70,31 @@
 }
 
 .splitInput {
-  width: 80px;
+  width: 60px;
 }
 
-.contributing {
-  background-color: #28a745 !important;
-  color: white !important;
+.toggleContributeBtn {
+  width: 30px !important;
+  height: 30px !important;
+  flex-shrink: 0;
+  border-radius: 10px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: bold;
+  color: white;
+  border: none;
+}
+
+.contributingBtn {
+  background-color: #28a745;
+}
+
+.notContributingBtn {
+  background-color: #dc3545;
 }
 
 .validationError {
