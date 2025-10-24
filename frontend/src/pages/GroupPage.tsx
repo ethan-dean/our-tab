@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getGroupDetails } from '../lib/api';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import Spinner from '../components/ui/Spinner';
 import GroupHeader from '../features/group/GroupHeader';
 import MemberBalances from '../features/group/MemberBalances';
@@ -12,7 +13,18 @@ import styles from './GroupPage.module.css';
 
 const GroupPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
-  const [activeView, setActiveView] = useState<'balances' | 'posts'>('balances');
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [activeView, setActiveView] = useState<'balances' | 'posts'>(
+    isMobile ? 'balances' : 'posts'
+  );
+
+  useEffect(() => {
+    if (isMobile) {
+      setActiveView('balances');
+    } else {
+      setActiveView('posts');
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (groupId) {
