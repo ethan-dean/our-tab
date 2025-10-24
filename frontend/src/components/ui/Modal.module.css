@@ -36,7 +36,7 @@
 /* Mobile full-screen styles */
 @media (max-width: 768px) {
   .overlay {
-    position: absolute; /* Change from fixed to absolute */
+    position: fixed; /* Change from fixed to absolute */
     top: 0;
     left: 0;
     right: 0;
