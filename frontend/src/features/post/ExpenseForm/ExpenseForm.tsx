@@ -6,8 +6,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { type Profile } from '../../../types/database';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+import Select from '../../../components/ui/Select';
 import styles from './ExpenseForm.module.css';
-import inputStyles from '../../../components/ui/Input.module.css';
 
 interface ExpenseFormProps {
   group: { id: string; group_members: { profiles: Profile }[] };
@@ -81,6 +81,11 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
     }
   };
 
+  const memberOptions = groupMembers.map(member => ({
+    value: member.id,
+    label: `${member.first_name} ${member.last_name}`,
+  }));
+
   return (
     <>
       <h3>{postToEdit ? 'Edit Expense' : 'Add New Expense'}</h3>
@@ -95,7 +100,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
           <label>Amount</label>
           <Input
             type="number"
-            value={totalAmount}
+            value={totalAmount || ''}
             onChange={e => setTotalAmount(parseFloat(e.target.value) || 0)}
             required
           />
@@ -113,13 +118,11 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ group, onSuccess, postToEdit 
         
         <div className={styles.field}>
           <label>Paid by</label>
-          <select value={payerId} onChange={e => setPayerId(e.target.value)} className={inputStyles.input}>
-            {groupMembers.map(member => (
-              <option key={member.id} value={member.id}>
-                {member.first_name} {member.last_name}
-              </option>
-            ))}
-          </select>
+          <Select
+            options={memberOptions}
+            value={payerId}
+            onChange={setPayerId}
+          />
         </div>
 
         <div className={styles.splitSection}>

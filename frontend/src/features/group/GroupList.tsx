@@ -23,7 +23,7 @@ const GroupList: React.FC = () => {
   const previousGroups = groupMembers?.filter(gm => gm.status === 'inactive') || [];
 
   return (
-    <div>
+    <div style={{marginTop: '20px'}}>
       <section>
         <h3>Active Groups</h3>
         {activeGroups.length > 0 ? (

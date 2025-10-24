@@ -5,9 +5,9 @@ import { useAuth } from '../../hooks/useAuth';
 import { type Profile } from '../../types/database';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
+import Select from '../../components/ui/Select';
 
 import styles from '../auth/Form.module.css';
-import inputStyles from '../../components/ui/Input.module.css';
 
 interface SettlementFormProps {
   group: { id: string; group_members: { profiles: Profile }[] };
@@ -46,6 +46,11 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
     }
   };
 
+  const memberOptions = otherMembers.map(member => ({
+    value: member.id,
+    label: `${member.first_name} ${member.last_name}`,
+  }));
+
   return (
     <form onSubmit={handleSubmit} className={styles.modalForm}>
       <h3>Record a Settlement</h3>
@@ -54,7 +59,6 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
         <label>You paid:</label>
         <Input 
           type="number" 
-          placeholder="Amount" 
           value={amount || ''} 
           onChange={e => setAmount(parseFloat(e.target.value) || 0)} 
           required 
@@ -63,13 +67,11 @@ const SettlementForm: React.FC<SettlementFormProps> = ({ group, onSuccess }) => 
 
       <div className={styles.formField}>
         <label>To:</label>
-        <select value={recipientId} onChange={e => setRecipientId(e.target.value)} required className={inputStyles.input}>
-          {otherMembers.map(member => (
-            <option key={member.id} value={member.id}>
-              {member.first_name} {member.last_name}
-            </option>
-          ))}
-        </select>
+        <Select
+          options={memberOptions}
+          value={recipientId}
+          onChange={setRecipientId}
+        />
       </div>
 
       <Button type="submit" disabled={mutation.isPending || !recipientId || amount <= 0}>

@@ -6,12 +6,13 @@ import Button from '../components/ui/Button';
 const DashboardPage: React.FC = () => {
   return (
     <div>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Manage Your Groups</h1>
-        <Link to="/add-group">
-          <Button>+ Create Group</Button>
-        </Link>
+      <header>
+        <h1>Manage Groups</h1>
       </header>
+
+      <Link to="/add-group">
+        <Button>+ Create Group</Button>
+      </Link>
 
       <GroupList />
     </div>
