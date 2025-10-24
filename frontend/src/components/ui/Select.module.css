@@ -103,20 +103,19 @@
   }
   .nativeSelect {
     /* Make native select visible and interactive */
+    position: static;
     opacity: 1;
     pointer-events: auto;
-    background-color: var(--color-surface);
+    background-color: #3b3b3b;
     color: inherit;
 
     /* Inherit styles from the input module for consistency */
+    width: 100%;
     padding: 0.8em 1em;
     margin: 0.5em 0;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1em;
     box-sizing: border-box;
-    -webkit-appearance: none; /* Removes default Safari styling */
-    -moz-appearance: none; /* Removes default Firefox styling */
-    appearance: none; /* Removes default styling */
   }
 }
