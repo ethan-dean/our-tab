@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getGroupDetails } from '../lib/api';
 import Spinner from '../components/ui/Spinner';
 import GroupHeader from '../features/group/GroupHeader';
 import MemberBalances from '../features/group/MemberBalances';
 import PostFeed from '../features/post/PostFeed';
-import ExpenseForm from '../features/post/ExpenseForm/ExpenseForm';
-import SettlementForm from '../features/post/SettlementForm';
-import Modal from '../components/ui/Modal';
 import Button from '../components/ui/Button';
 import BottomNav from '../components/layout/BottomNav';
 import styles from './GroupPage.module.css';
 
-import InviteForm from '../features/group/InviteForm';
-
 const GroupPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
-  const [modalContent, setModalContent] = useState<'expense' | 'settlement' | 'invite' | null>(null);
-  const [activeView, setActiveView] = useState<'balances' | 'posts'>('posts');
+  const [activeView, setActiveView] = useState<'balances' | 'posts'>('balances');
 
   useEffect(() => {
     if (groupId) {
@@ -43,9 +37,9 @@ const GroupPage: React.FC = () => {
     <div>
       <GroupHeader group={group} />
       <div className={styles.buttonContainer}>
-        <Button size="smMd" onClick={() => setModalContent('expense')}>+ Add Expense</Button>
-        <Button size="smMd" onClick={() => setModalContent('settlement')} variant="secondary">+ Add Settlement</Button>
-        <Button size="smMd" onClick={() => setModalContent('invite')} variant="secondary">Invite Member</Button>
+        <Link to={`/group/${groupId}/add-expense`}><Button size="smMd">+ Add Expense</Button></Link>
+        <Link to={`/group/${groupId}/add-settlement`}><Button size="smMd" variant="secondary">+ Add Settlement</Button></Link>
+        <Link to={`/group/${groupId}/invite`}><Button size="smMd" variant="secondary">Invite Member</Button></Link>
       </div>
       <div className={styles.gridContainer}>
         <main className={styles.mainContent}>
@@ -55,18 +49,6 @@ const GroupPage: React.FC = () => {
           <MemberBalances groupId={groupId} />
         </aside>
       </div>
-
-      <Modal isOpen={!!modalContent} onClose={() => setModalContent(null)}>
-        {modalContent === 'expense' && (
-          <ExpenseForm group={group} onSuccess={() => setModalContent(null)} />
-        )}
-        {modalContent === 'settlement' && (
-          <SettlementForm group={group} onSuccess={() => setModalContent(null)} />
-        )}
-        {modalContent === 'invite' && (
-          <InviteForm groupId={group.id} onSuccess={() => setModalContent(null)} />
-        )}
-      </Modal>
 
       <BottomNav activeView={activeView} setActiveView={setActiveView} />
     </div>

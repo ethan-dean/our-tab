@@ -10,6 +10,10 @@ const SubPageNavbar: React.FC = () => {
     if (location.pathname.includes('/notifications')) return 'Notifications';
     if (location.pathname.includes('/profile')) return 'Profile';
     if (location.pathname.includes('/post')) return 'Post Details';
+    if (location.pathname.includes('/add-group')) return 'Create Group';
+    if (location.pathname.includes('/add-expense')) return 'Add Expense';
+    if (location.pathname.includes('/add-settlement')) return 'Add Settlement';
+    if (location.pathname.includes('/invite')) return 'Invite Member';
     return 'Back'; // Fallback title
   };
 

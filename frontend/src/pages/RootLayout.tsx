@@ -9,7 +9,11 @@ const RootLayout: React.FC = () => {
   const isSubPage = 
     location.pathname.includes('/post/') || 
     location.pathname.includes('/notifications') || 
-    location.pathname.includes('/profile');
+    location.pathname.includes('/profile') ||
+    location.pathname.includes('/add-group') ||
+    location.pathname.includes('/add-expense') ||
+    location.pathname.includes('/add-settlement') ||
+    location.pathname.includes('/invite');
 
   return (
     <>

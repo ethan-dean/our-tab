@@ -9,6 +9,7 @@
 
 .logo {
   height: var(--font-size-xxl);
+  width: var(--font-size-xxl);
 }
 
 .navLinks {
@@ -62,4 +63,11 @@
   color: white;
   padding: 0.5rem 1rem;
   cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1rem;
+  }
 }

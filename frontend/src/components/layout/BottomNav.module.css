@@ -14,11 +14,15 @@
   background: none;
   border: none;
   color: #888;
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   font-size: var(--font-size-sm);
   font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .navButton.active {

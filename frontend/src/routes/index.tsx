@@ -20,6 +20,10 @@ import AcceptInvitePage from '../pages/AcceptInvitePage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import CompleteProfilePage from '../pages/CompleteProfilePage';
+import CreateGroupPage from '../pages/CreateGroupPage';
+import AddExpensePage from '../pages/AddExpensePage';
+import AddSettlementPage from '../pages/AddSettlementPage';
+import InviteMemberPage from '../pages/InviteMemberPage';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +45,7 @@ export const router = createBrowserRouter([
           { path: 'complete-profile', element: <CompleteProfilePage /> },
           { path: 'dashboard', element: <DashboardRedirectPage /> },
           { path: 'manage-groups', element: <ManageGroupsPage /> },
+          { path: 'add-group', element: <CreateGroupPage /> },
           { path: 'accept-invite', element: <AcceptInvitePage /> },
           { path: 'notifications', element: <NotificationsPage /> },
           {
@@ -49,7 +54,10 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <GroupPage /> },
               { path: 'post/:postId', element: <PostDetailPage /> },
-            ]
+              { path: 'add-expense', element: <AddExpensePage /> },
+              { path: 'add-settlement', element: <AddSettlementPage /> },
+              { path: 'invite', element: <InviteMemberPage /> },
+            ],
           },
           { path: 'profile', element: <ProfilePage /> },
         ],

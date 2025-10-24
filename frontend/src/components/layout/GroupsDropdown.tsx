@@ -6,13 +6,10 @@ import { getUserGroups } from '../../lib/api';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
-import Modal from '../ui/Modal';
-import CreateGroupForm from '../../features/group/CreateGroupForm';
 import styles from './GroupsDropdown.module.css';
 
 const GroupsDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { groupId } = useParams<{ groupId: string }>();
@@ -64,14 +61,9 @@ const GroupsDropdown: React.FC = () => {
           ))}
           <div className={styles.separator} />
           <Link to="/manage-groups" onClick={() => setIsOpen(false)}>Manage Groups</Link>
-          <button onClick={() => { setIsModalOpen(true); setIsOpen(false); }}>
-            + Create Group
-          </button>
+          <Link to="/add-group" onClick={() => setIsOpen(false)}>+ Create Group</Link>
         </div>
       )}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <CreateGroupForm onSuccess={() => setIsModalOpen(false)} />
-      </Modal>
     </div>
   );
 };
