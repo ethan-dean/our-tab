@@ -23,7 +23,7 @@ expressServer.use(morgan('dev'));
 // Allow requests from the following addresses, production and development.
 // www.thecruiseconnect.com is re-routed to thecruiseconnect.com by nginx setup.
 expressServer.use(cors({
-  origin: ['https://ourtab.xyz', `http://localhost:${devServerPort}`],
+  origin: ['https://ourtab.ethandean.dev', `http://localhost:${devServerPort}`],
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   credentials: true,      // Allow cookies to be sent/received
