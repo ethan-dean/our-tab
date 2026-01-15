@@ -1,0 +1,18 @@
+[Unit]
+Description=OurTab Production Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/deployments/ot
+ExecStart=/usr/bin/node /root/deployments/ot/dist/index.js
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ot_prod
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

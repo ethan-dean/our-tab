@@ -59,4 +59,7 @@ jobs:
           --include "package-lock.json" \
           --exclude "*" \
           ./backend/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH
-        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "pm2 restart ot_prod"
+
+        # Copy systemd service file and restart
+        scp ./backend/ot_prod.service $SERVER_USER@$SERVER_HOST:/etc/systemd/system/ot_prod.service
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "systemctl daemon-reload && systemctl enable ot_prod && systemctl restart ot_prod"
